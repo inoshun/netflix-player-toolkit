@@ -1,23 +1,13 @@
 const getVideoPlayer = () => {
-  const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI?.().videoPlayer;
+  const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI()?.videoPlayer;
 
-  if (!videoPlayerApi) {
-    return null;
-  }
+  if (!videoPlayerApi) return;
 
-  const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds?.()?.[0];
+  const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds()[0];
 
-  if (!firstVideoPlayerSessionId) {
-    return null;
-  }
+  if (!firstVideoPlayerSessionId) return;
 
-  const videoPlayer = videoPlayerApi.getVideoPlayerBySessionId?.(firstVideoPlayerSessionId);
-
-  if (!videoPlayer) {
-    return null;
-  }
-
-  return videoPlayer;
+  return videoPlayerApi.getVideoPlayerBySessionId(firstVideoPlayerSessionId);
 };
 
 export const getNetflixVideoPlayer = () => {
@@ -41,9 +31,9 @@ export const getNetflixVideoPlayer = () => {
 };
 
 export const seekToSeconds = (videoPlayer: NetflixVideoPlayer, seconds: number) => {
-  videoPlayer.seek?.(seconds * 1000);
+  videoPlayer.seek(seconds * 1000);
 };
 
 export const getCurrentSeconds = (videoPlayer: NetflixVideoPlayer) => {
-  return (videoPlayer.getCurrentTime?.() ?? 0) / 1000;
+  return (videoPlayer.getCurrentTime() ?? 0) / 1000;
 };

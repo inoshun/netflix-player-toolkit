@@ -13,7 +13,7 @@ export const loopVideo = async () => {
   if (!videoPlayer) return;
 
   seekToSeconds(videoPlayer, startSeconds);
-  videoPlayer.play?.();
+  videoPlayer.play();
 
   const locationHref = location.href;
 

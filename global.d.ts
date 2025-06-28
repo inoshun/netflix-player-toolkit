@@ -1,9 +1,8 @@
 declare global {
   interface NetflixVideoPlayer {
-    play?: () => void;
-    pause?: () => void;
-    seek?: (time: number) => void;
-    getCurrentTime?: () => number;
+    play: () => void;
+    seek: (time: number) => void;
+    getCurrentTime: () => number;
   }
 
   interface Window {
@@ -11,12 +10,14 @@ declare global {
       appContext?: {
         state?: {
           playerApp?: {
-            getAPI?: () => {
-              videoPlayer?: {
-                getAllPlayerSessionIds?: () => string[];
-                getVideoPlayerBySessionId?: (id: string) => NetflixVideoPlayer;
-              };
-            };
+            getAPI: () =>
+              | {
+                  videoPlayer: {
+                    getAllPlayerSessionIds: () => string[];
+                    getVideoPlayerBySessionId: (id: string) => NetflixVideoPlayer;
+                  };
+                }
+              | undefined;
           };
         };
       };
