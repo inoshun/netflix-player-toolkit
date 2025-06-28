@@ -69,6 +69,7 @@
   };
 
   // src/index.ts
+  console.log("userscript loaded");
   window.addEventListener("load", () => {
     loopVideo();
   });
