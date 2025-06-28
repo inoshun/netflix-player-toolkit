@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Netflix player toolkit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.4
+// @version      1.0.5
 // @description  Netflix player toolkit
 // @author       inoshun
 // @match        https://www.netflix.com/watch/*
@@ -35,19 +35,11 @@
 
   // src/netflixVideoPlayer.ts
   var getVideoPlayer = () => {
-    const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI?.().videoPlayer;
-    if (!videoPlayerApi) {
-      return null;
-    }
-    const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds?.()?.[0];
-    if (!firstVideoPlayerSessionId) {
-      return null;
-    }
-    const videoPlayer = videoPlayerApi.getVideoPlayerBySessionId?.(firstVideoPlayerSessionId);
-    if (!videoPlayer) {
-      return null;
-    }
-    return videoPlayer;
+    const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI()?.videoPlayer;
+    if (!videoPlayerApi) return;
+    const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds()[0];
+    if (!firstVideoPlayerSessionId) return;
+    return videoPlayerApi.getVideoPlayerBySessionId(firstVideoPlayerSessionId);
   };
   var getNetflixVideoPlayer = () => {
     return new Promise((resolve) => {
@@ -67,10 +59,10 @@
     });
   };
   var seekToSeconds = (videoPlayer, seconds) => {
-    videoPlayer.seek?.(seconds * 1e3);
+    videoPlayer.seek(seconds * 1e3);
   };
   var getCurrentSeconds = (videoPlayer) => {
-    return (videoPlayer.getCurrentTime?.() ?? 0) / 1e3;
+    return (videoPlayer.getCurrentTime() ?? 0) / 1e3;
   };
 
   // src/loopVideo.ts
@@ -81,7 +73,7 @@
     const videoPlayer = await getNetflixVideoPlayer();
     if (!videoPlayer) return;
     seekToSeconds(videoPlayer, startSeconds);
-    videoPlayer.play?.();
+    videoPlayer.play();
     const locationHref = location.href;
     const waitForReplay = setInterval(() => {
       const currentSeconds = getCurrentSeconds(videoPlayer);
