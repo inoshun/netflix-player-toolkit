@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Netflix player toolkit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.6
+// @version      1.0.7
 // @description  Netflix player toolkit
 // @author       inoshun
 // @match        https://www.netflix.com/watch/*
@@ -58,10 +58,13 @@
       }, 1e4);
     });
   };
-  var seekToSeconds = (videoPlayer, seconds) => {
+  var playVideo = (videoPlayer) => {
+    videoPlayer.play();
+  };
+  var seekVideoToSeconds = (videoPlayer, seconds) => {
     videoPlayer.seek(seconds * 1e3);
   };
-  var getCurrentSeconds = (videoPlayer) => {
+  var getCurrentVideoTimeInSeconds = (videoPlayer) => {
     return (videoPlayer.getCurrentTime() ?? 0) / 1e3;
   };
 
@@ -72,13 +75,13 @@
     const { startSeconds, endSeconds } = timeRange;
     const videoPlayer = await getNetflixVideoPlayer();
     if (!videoPlayer) return;
-    seekToSeconds(videoPlayer, startSeconds);
-    videoPlayer.play();
+    seekVideoToSeconds(videoPlayer, startSeconds);
+    playVideo(videoPlayer);
     const locationHref = location.href;
     const waitForReplay = setInterval(() => {
-      const currentSeconds = getCurrentSeconds(videoPlayer);
+      const currentSeconds = getCurrentVideoTimeInSeconds(videoPlayer);
       if (currentSeconds < startSeconds || currentSeconds > endSeconds) {
-        seekToSeconds(videoPlayer, startSeconds);
+        seekVideoToSeconds(videoPlayer, startSeconds);
       }
       if (location.href !== locationHref) clearInterval(waitForReplay);
     }, 250);
