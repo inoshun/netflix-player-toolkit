@@ -1,37 +1,34 @@
+const getVideoPlayer = () => {
+  const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI?.().videoPlayer;
+
+  if (!videoPlayerApi) {
+    return null;
+  }
+
+  const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds?.()?.[0];
+
+  if (!firstVideoPlayerSessionId) {
+    return null;
+  }
+
+  const videoPlayer = videoPlayerApi.getVideoPlayerBySessionId?.(firstVideoPlayerSessionId);
+
+  if (!videoPlayer) {
+    return null;
+  }
+
+  return videoPlayer;
+};
+
 export const getNetflixVideoPlayer = () => {
-  const getVideoPlayer = () => {
-    const videoPlayerApi =
-      unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI?.().videoPlayer;
-
-    console.log('videoPlayerApi', videoPlayerApi);
-
-    if (!videoPlayerApi) {
-      return null;
-    }
-
-    const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds?.()?.[0];
-
-    if (!firstVideoPlayerSessionId) {
-      return null;
-    }
-
-    const videoPlayer = videoPlayerApi.getVideoPlayerBySessionId?.(firstVideoPlayerSessionId);
-
-    if (!videoPlayer) {
-      return null;
-    }
-
-    return videoPlayer;
-  };
-
   return new Promise<NetflixVideoPlayer | null>((resolve) => {
     const waitForReady = setInterval(() => {
       const videoPlayer = getVideoPlayer();
 
       if (videoPlayer) {
         clearInterval(waitForReady);
-        resolve(videoPlayer);
         clearTimeout(timeout);
+        resolve(videoPlayer);
       }
     }, 500);
 
