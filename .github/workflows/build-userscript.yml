@@ -1,0 +1,39 @@
+name: Build & Release Userscript
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.0'
+      - run: npm ci
+      - run: npm run build
+
+      - id: get-version
+        run: echo "VERSION=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.get-version.outputs.VERSION }}" -m "Release v${{ steps.get-version.outputs.VERSION }}"
+          git push origin "v${{ steps.get-version.outputs.VERSION }}"
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: 'v${{ steps.get-version.outputs.VERSION }}'
+          name: 'v${{ steps.get-version.outputs.VERSION }}'
+          files: dist/userscript.js
