@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Netflix player toolkit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.3
+// @version      1.0.4
 // @description  Netflix player toolkit
 // @author       inoshun
 // @match        https://www.netflix.com/watch/*
@@ -93,7 +93,7 @@
   };
 
   // src/index.ts
-  console.log("userscript loaded!!");
+  console.log("userscript loaded!!!!");
   window.addEventListener("load", () => {
     loopVideo();
   });
