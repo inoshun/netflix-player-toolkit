@@ -23,23 +23,36 @@
 
   // src/netflixVideoPlayer.ts
   var getNetflixVideoPlayer = () => {
-    return new Promise((resolve) => {
+    const getVideoPlayer = () => {
       const videoPlayerApi = unsafeWindow.netflix?.appContext?.state?.playerApp?.getAPI?.().videoPlayer;
+      console.log("videoPlayerApi", videoPlayerApi);
       if (!videoPlayerApi) {
-        console.error("Netflix video player API not found");
-        return resolve(null);
+        return null;
       }
       const firstVideoPlayerSessionId = videoPlayerApi.getAllPlayerSessionIds?.()?.[0];
       if (!firstVideoPlayerSessionId) {
-        console.error("Netflix video player session IDs not found");
-        return resolve(null);
+        return null;
       }
       const videoPlayer = videoPlayerApi.getVideoPlayerBySessionId?.(firstVideoPlayerSessionId);
       if (!videoPlayer) {
-        console.error("Netflix video player not found");
-        return resolve(null);
+        return null;
       }
-      return resolve(videoPlayer);
+      return videoPlayer;
+    };
+    return new Promise((resolve) => {
+      const waitForReady = setInterval(() => {
+        const videoPlayer = getVideoPlayer();
+        if (videoPlayer) {
+          clearInterval(waitForReady);
+          resolve(videoPlayer);
+          clearTimeout(timeout);
+        }
+      }, 500);
+      const timeout = setTimeout(() => {
+        console.error("Netflix video player not found after 10 seconds");
+        clearInterval(waitForReady);
+        resolve(null);
+      }, 1e4);
     });
   };
   var seekToSeconds = (videoPlayer, seconds) => {
