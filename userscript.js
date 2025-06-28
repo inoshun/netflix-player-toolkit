@@ -85,7 +85,7 @@
   };
 
   // src/index.ts
-  console.log("userscript loaded!!!!");
+  console.log("Netflix Player Toolkit");
   window.addEventListener("load", () => {
     loopVideo();
   });
