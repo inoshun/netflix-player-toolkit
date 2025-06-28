@@ -1,3 +1,15 @@
+// ==UserScript==
+// @name         Netflix player toolkit
+// @namespace    http://tampermonkey.net/
+// @version      1.0.2
+// @description  Netflix player toolkit
+// @author       inoshun
+// @match        https://www.netflix.com/watch/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=netflix.com
+// @updateURL    https://inoshun.github.io/netflix-player-toolkit/userscript.js
+// @downloadURL  https://inoshun.github.io/netflix-player-toolkit/userscript.js
+// @grant        unsafeWindow
+// ==/UserScript==
 "use strict";
 (() => {
   // src/getTimeRangeFromURL.ts
