@@ -21,19 +21,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - id: get-version
-        run: echo "VERSION=$(node -p 'require("./package.json").version')" >> $GITHUB_OUTPUT
-
-      - name: Create tag
-        run: |
-          git config user.name  "github-actions"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ steps.get-version.outputs.VERSION }}" -m "Release v${{ steps.get-version.outputs.VERSION }}"
-          git push origin "v${{ steps.get-version.outputs.VERSION }}"
-
-      - name: Upload release asset
-        uses: softprops/action-gh-release@v2
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          tag_name: 'v${{ steps.get-version.outputs.VERSION }}'
-          name: 'v${{ steps.get-version.outputs.VERSION }}'
-          files: dist/userscript.js
+          branch: gh-pages
+          folder: dist
