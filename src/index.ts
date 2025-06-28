@@ -1,3 +1,5 @@
 import { loopVideo } from './loopVideo';
 
-window.addEventListener('load', loopVideo);
+window.addEventListener('load', () => {
+  loopVideo();
+});
