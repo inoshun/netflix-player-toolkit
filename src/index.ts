@@ -1,6 +1,6 @@
 import { loopVideo } from './loopVideo';
 
-console.log('userscript loaded!!!!');
+console.log('Netflix Player Toolkit');
 
 window.addEventListener('load', () => {
   loopVideo();
