@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Netflix player toolkit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.5
+// @version      1.0.6
 // @description  Netflix player toolkit
 // @author       inoshun
 // @match        https://www.netflix.com/watch/*
