@@ -30,10 +30,14 @@ export const getNetflixVideoPlayer = () => {
   });
 };
 
-export const seekToSeconds = (videoPlayer: NetflixVideoPlayer, seconds: number) => {
+export const playVideo = (videoPlayer: NetflixVideoPlayer) => {
+  videoPlayer.play();
+};
+
+export const seekVideoToSeconds = (videoPlayer: NetflixVideoPlayer, seconds: number) => {
   videoPlayer.seek(seconds * 1000);
 };
 
-export const getCurrentSeconds = (videoPlayer: NetflixVideoPlayer) => {
+export const getCurrentVideoTimeInSeconds = (videoPlayer: NetflixVideoPlayer) => {
   return (videoPlayer.getCurrentTime() ?? 0) / 1000;
 };

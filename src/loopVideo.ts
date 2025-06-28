@@ -1,5 +1,10 @@
 import { getTimeRangeFromURL } from './getTimeRangeFromURL';
-import { getCurrentSeconds, getNetflixVideoPlayer, seekToSeconds } from './netflixVideoPlayer';
+import {
+  getCurrentVideoTimeInSeconds,
+  getNetflixVideoPlayer,
+  playVideo,
+  seekVideoToSeconds,
+} from './netflixVideoPlayer';
 
 export const loopVideo = async () => {
   const timeRange = getTimeRangeFromURL();
@@ -12,15 +17,15 @@ export const loopVideo = async () => {
 
   if (!videoPlayer) return;
 
-  seekToSeconds(videoPlayer, startSeconds);
-  videoPlayer.play();
+  seekVideoToSeconds(videoPlayer, startSeconds);
+  playVideo(videoPlayer);
 
   const locationHref = location.href;
 
   const waitForReplay = setInterval(() => {
-    const currentSeconds = getCurrentSeconds(videoPlayer);
+    const currentSeconds = getCurrentVideoTimeInSeconds(videoPlayer);
     if (currentSeconds < startSeconds || currentSeconds > endSeconds) {
-      seekToSeconds(videoPlayer, startSeconds);
+      seekVideoToSeconds(videoPlayer, startSeconds);
     }
     if (location.href !== locationHref) clearInterval(waitForReplay);
   }, 250);
